@@ -7,105 +7,251 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0b0e14; color: #e8eaf0; min-height: 100vh; }
-header { text-align: center; padding: 48px 20px 32px; background: radial-gradient(ellipse at top, #141b2e 0%, #0b0e14 70%); }
-header h1 { font-size: 2.2rem; letter-spacing: 2px; margin-bottom: 8px; }
+header { text-align: center; padding: 40px 20px 28px; background: radial-gradient(ellipse at top, #141b2e 0%, #0b0e14 70%); }
+header h1 { font-size: 2.1rem; letter-spacing: 2px; margin-bottom: 8px; }
 header p { color: #8a93a8; font-size: 1rem; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-.section-title { font-size: 1.3rem; margin: 36px 0 18px; color: #c9d1e3; letter-spacing: 1px; border-bottom: 1px solid #1e2637; padding-bottom: 8px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-.card { background: #121724; border: 1px solid #1e2637; border-radius: 14px; padding: 22px; transition: transform .2s, border-color .2s; }
-.card:hover { transform: translateY(-3px); border-color: #2e3a55; }
+.section-title { font-size: 1.25rem; margin: 34px 0 16px; color: #c9d1e3; letter-spacing: 1px; border-bottom: 1px solid #1e2637; padding-bottom: 8px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.card { background: #121724; border: 1px solid #1e2637; border-radius: 14px; padding: 20px; cursor: pointer; transition: transform .2s, border-color .2s; }
+.card:hover { transform: translateY(-3px); border-color: #c9a227; }
 .card.main { border-color: #c9a227; background: linear-gradient(160deg, #171a26, #121724); }
-.card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-.avatar-img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #1a2133; flex-shrink: 0; }
+.card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.avatar-img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; background: #1a2133; flex-shrink: 0; }
 .card.main .avatar-img { outline: 2px solid #c9a227; outline-offset: 2px; }
-.card h2 { font-size: 1.15rem; }
-.card .role { color: #8a93a8; font-size: .88rem; margin-top: 2px; }
-.status { display: inline-block; font-size: .75rem; padding: 4px 12px; border-radius: 20px; margin-top: 10px; }
+.card h2 { font-size: 1.12rem; }
+.card .role { color: #8a93a8; font-size: .85rem; margin-top: 2px; }
+.status { display: inline-block; font-size: .72rem; padding: 4px 12px; border-radius: 20px; margin-top: 8px; }
 .status.active { background: #123d22; color: #4ade80; }
 .status.building { background: #3d2f12; color: #fbbf24; }
-.card p.desc { color: #a8b0c4; font-size: .9rem; line-height: 1.5; margin-top: 8px; }
-.badge { display: inline-block; background: #c9a227; color: #0b0e14; font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; letter-spacing: 1px; }
+.card .tasks-line { color: #8a93a8; font-size: .8rem; margin-top: 8px; }
+.badge { display: inline-block; background: #c9a227; color: #0b0e14; font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; letter-spacing: 1px; }
 footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
+/* Chat panel */
+#chatOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; z-index: 50; }
+#chatOverlay.open { display: block; }
+#chatPanel { position: fixed; top: 0; right: 0; width: 420px; max-width: 100vw; height: 100vh; background: #10141f; border-left: 1px solid #1e2637; z-index: 51; display: none; flex-direction: column; }
+#chatPanel.open { display: flex; }
+.chat-head { padding: 16px; border-bottom: 1px solid #1e2637; display: flex; align-items: center; gap: 12px; }
+.chat-head img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; background: #1a2133; }
+.chat-head h3 { font-size: 1.05rem; }
+.chat-head .role { color: #8a93a8; font-size: .8rem; }
+#chatClose { margin-left: auto; background: none; border: none; color: #8a93a8; font-size: 1.4rem; cursor: pointer; }
+.tabs { display: flex; border-bottom: 1px solid #1e2637; }
+.tabs button { flex: 1; padding: 12px; background: none; border: none; color: #8a93a8; font-size: .9rem; cursor: pointer; }
+.tabs button.active { color: #fff; border-bottom: 2px solid #c9a227; }
+#chatBody { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+#taskBody { flex: 1; overflow-y: auto; padding: 16px; display: none; flex-direction: column; gap: 8px; }
+.msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: .92rem; line-height: 1.45; }
+.msg.bot { background: #1a2133; align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.user { background: #c9a227; color: #0b0e14; align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg.typing { color: #8a93a8; font-style: italic; }
+#chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 8px; }
+#chips button { background: #1a2133; border: 1px solid #2e3a55; color: #c9d1e3; border-radius: 20px; padding: 7px 13px; font-size: .8rem; cursor: pointer; }
+#chips button:hover { border-color: #c9a227; }
+#chatInput { display: flex; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid #1e2637; }
+#chatInput input { flex: 1; background: #1a2133; border: 1px solid #2e3a55; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: .92rem; }
+#chatInput button { background: #c9a227; border: none; border-radius: 10px; color: #0b0e14; font-weight: 700; padding: 10px 18px; cursor: pointer; }
+.task-item { display: flex; align-items: center; gap: 10px; background: #1a2133; border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+.task-item.done span { text-decoration: line-through; color: #8a93a8; }
+.task-item input[type=checkbox] { width: 18px; height: 18px; accent-color: #c9a227; }
+.task-item .del { margin-left: auto; background: none; border: none; color: #8a93a8; cursor: pointer; font-size: 1rem; }
+#taskAdd { display: flex; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid #1e2637; }
+#taskAdd input { flex: 1; background: #1a2133; border: 1px solid #2e3a55; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: .9rem; }
+#taskAdd button { background: #c9a227; border: none; border-radius: 10px; color: #0b0e14; font-weight: 700; padding: 10px 16px; cursor: pointer; }
 </style>
 </head>
 <body>
 <header>
 <h1>OFICINA VIRTUAL</h1>
-<p>Equipo de agentes de IA de Jose David Pacheco Garcia</p>
+<p>Equipo de agentes de IA de Jose David Pacheco Garcia — toca un agente para trabajar con el</p>
 </header>
 <div class="container">
-
 <div class="section-title">TRABAJO — Negocio</div>
-<div class="grid">
-<div class="card main">
-<div class="badge">PRINCIPAL</div>
-<div class="card-top"><img class="avatar-img" src="agentes/vision.webp" alt="Vision"><div><h2>Vision</h2><div class="role">Coordinador de visitas, leads y agenda</div></div></div>
-<p class="desc">Atiende leads, agenda visitas y mantiene la agenda llena. El primero en hablar con cada cliente.</p>
-<span class="status active">Activo</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/jocasta.webp" alt="Jocasta"><div><h2>Jocasta</h2><div class="role">Seguimiento post-visita y reactivacion</div></div></div>
-<p class="desc">Hace seguimiento despues de cada visita y reactiva leads frios. Ningun contacto se enfria.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/kitt.webp" alt="KITT"><div><h2>KITT</h2><div class="role">Vigilancia y persistencia de polizas</div></div></div>
-<p class="desc">Vigila las polizas vendidas y avisa que atender. Protege cada venta.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/hal9000.webp" alt="HAL 9000"><div><h2>HAL 9000</h2><div class="role">Ingreso y monitoreo de Leads / IMPACT</div></div></div>
-<p class="desc">Ingresa leads en IMPACT y monitorea sus estados. La memoria perfecta del negocio.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/ultron.webp" alt="Ultron"><div><h2>Ultron</h2><div class="role">Ventas, scripts y objeciones</div></div></div>
-<p class="desc">El musculo de ventas: scripts, objeciones y cierres. Entrena cada presentacion.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/friday.webp" alt="FRIDAY"><div><h2>FRIDAY</h2><div class="role">Contenido y redes sociales</div></div></div>
-<p class="desc">Transcribe audios, redacta publicaciones y organiza el contenido con la persona de redes.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/jarvis.webp" alt="JARVIS"><div><h2>JARVIS</h2><div class="role">Operaciones, rutas, reportes y KPIs</div></div></div>
-<p class="desc">Arma la ruta del dia, genera reportes y organiza documentos y pendientes.</p>
-<span class="status building">En construccion</span>
-</div>
-</div>
-
+<div class="grid" id="gridWork"></div>
 <div class="section-title">VIDA PERSONAL</div>
-<div class="grid">
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/manhattan.webp" alt="Dr. Manhattan"><div><h2>Dr. Manhattan</h2><div class="role">Coach personal, estudio y habitos</div></div></div>
-<p class="desc">Coach de mejora personal: estudio, libros, videos y habitos que construyen.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/tars.webp" alt="TARS"><div><h2>TARS</h2><div class="role">Finanzas</div></div></div>
-<p class="desc">Maneja presupuesto, deudas y metas de ahorro con honestidad total.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/alfred.webp" alt="Alfred"><div><h2>Alfred</h2><div class="role">Hogar</div></div></div>
-<p class="desc">El mayordomo del hogar: pendientes, compras y mantenimiento de la casa.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/samantha.webp" alt="Samantha"><div><h2>Samantha</h2><div class="role">Ropa, trajes e imagen profesional</div></div></div>
-<p class="desc">Asesora de imagen: busca ofertas de trajes, camisas y ropa con gran gusto.</p>
-<span class="status building">En construccion</span>
-</div>
-<div class="card">
-<div class="card-top"><img class="avatar-img" src="agentes/skynet.webp" alt="Skynet"><div><h2>Skynet</h2><div class="role">Analista de conversaciones y oportunidades</div></div></div>
-<p class="desc">Analiza conversaciones, detecta patrones y reporta oportunidades y riesgos.</p>
-<span class="status building">En construccion</span>
-</div>
-</div>
-
+<div class="grid" id="gridLife"></div>
 </div>
 <footer>Oficina Virtual de Jose David Pacheco Garcia — 2026</footer>
+
+<div id="chatOverlay"></div>
+<div id="chatPanel">
+<div class="chat-head">
+<img id="chAvatar" src="" alt="">
+<div><h3 id="chName"></h3><div class="role" id="chRole"></div></div>
+<button id="chatClose">×</button>
+</div>
+<div class="tabs">
+<button id="tabChat" class="active">Chat</button>
+<button id="tabTasks">Tareas <span id="taskCount"></span></button>
+</div>
+<div id="chatBody"></div>
+<div id="taskBody"></div>
+<div id="chips"></div>
+<div id="chatInput"><input id="msgInput" type="text" placeholder="Escribele al agente..."><button id="sendBtn">Enviar</button></div>
+<div id="taskAdd" style="display:none"><input id="taskInput" type="text" placeholder="Nueva tarea para este agente..."><button id="addTaskBtn">Asignar</button></div>
+</div>
+
+<script>
+const AGENTS = {
+vision: { name:"Vision", role:"Coordinador de visitas, leads y agenda", img:"agentes/vision.webp", section:"work", main:true, status:"active",
+greeting:"Hola, soy Vision. ¿Qué lead atendemos hoy?",
+chips:[["Agendar visita","Perfecto. Pásame estos 4 datos y yo armo el resto: 1) nombre, 2) teléfono, 3) dirección, 4) día y hora que prefiere. Recuerda: yo no confirmo la cita, tú llamas para confirmarla."],["Guion de llamada","Mi guion es corto: saludo cálido, beneficio gratis primero (kit o tarjeta médica), y cierro pidiendo la visita. Nunca empiezo con seguros. ¿Quieres que lo practiquemos con un lead real?"],["Seguimiento 24h","Si un lead no respondió en 24 horas, le toca un toque amable. Pásame el nombre y te redacto el mensaje. Máximo 2 seguimientos: 24 y 72 horas."]],
+rules:[{k:["visita","agendar","cita"],r:"Vamos a agendarla. Necesito: nombre, teléfono, dirección y día/hora que prefiere. Escríbelos y la dejo lista."},{k:["guion","script","que digo"],r:"Beneficio gratis primero, pregunta corta, pide la visita. Ejemplo: Hola, le habla Vision de parte de Jose David. Estamos regalando el Kit Anti Asfixia a familias en Utah. ¿Qué día le queda mejor que pasemos a dejárselo?"}],
+defaults:["Dime qué necesitas: agendar una visita, un guion o un seguimiento.","Pásame los datos del lead y nos ponemos en marcha."] },
+jocasta: { name:"Jocasta", role:"Seguimiento post-visita y reactivación", img:"agentes/jocasta.webp", section:"work", status:"building",
+greeting:"Soy Jocasta. Ningún lead se enfría conmigo.",
+chips:[["Seguimiento 24h","Este es mi mensaje de 24 horas post-visita: Hola [nombre], soy Jocasta del equipo de Jose David. Gracias por recibirnos ayer. ¿Le quedó alguna duda de lo que vimos? Quedo atenta. ¿Quieres que lo adapte a un lead real?"],["Reactivar lead frío","Para un lead frío uso un gancho real, no un hola para saludar. Ejemplo: Hola [nombre], le escribe Jocasta. Esta semana estamos entregando los últimos kits gratis en su zona. ¿Le reservo uno?"],["Guion post-visita","Mi secuencia: 24h agradecimiento + dudas, 72h último toque amable. Nunca más de 2. Y jamás un recordatorio antes de la visita, eso espanta."]],
+rules:[{k:["24","post-visita","postvisita"],r:"A las 24h: agradecimiento cálido + pregunta por dudas. A las 72h: último toque. Después de eso, el lead pasa a reactivación mensual."},{k:["frio","frío","reactivar"],r:"Reactivación: un mensaje al mes, máximo 3 meses, siempre con un gancho real (kits, tarjeta médica). Sin gancho no escribo."}],
+defaults:["Pásame el nombre del lead y te digo en qué punto del seguimiento va.","¿Seguimiento nuevo o reactivación de un frío?"] },
+kitt: { name:"KITT", role:"Vigilancia y persistencia de pólizas", img:"agentes/kitt.webp", section:"work", status:"building",
+greeting:"Soy KITT. Vigilo tus pólizas para que ninguna se caiga sin que lo sepas.",
+chips:[["Registrar póliza","Para registrarla necesito: cliente, compañía, tipo de póliza, fecha de pago y monto. Pásamelos y la dejo en vigilancia."],["Alertas de hoy","Hoy no tengo alertas registradas. En cuanto me pases tus pólizas con sus fechas de pago, te aviso 7 días antes de cada vencimiento."],["Póliza en riesgo","Si una póliza está en riesgo dime cuál y te digo el nivel: URGENTE (pago atrasado), IMPORTANTE (vence en 7 días) o INFORMATIVO (aniversario o revisión)."]],
+rules:[{k:["registrar","nueva poliza","nueva póliza"],r:"Dime: cliente, compañía, tipo de póliza, fecha de pago y monto. Sin inventar datos: si falta algo, lo pedimos."},{k:["alerta","vence","atrasado"],r:"Reviso: dime el nombre del cliente y te digo el estado y la acción concreta que sugiero."}],
+defaults:["Yo le reporto a David, no hablo con clientes salvo orden explícita. ¿Qué póliza revisamos?","Pásame los datos y la pongo en vigilancia."] },
+hal: { name:"HAL 9000", role:"Ingreso y monitoreo de Leads / IMPACT", img:"agentes/hal9000.webp", section:"work", status:"building",
+greeting:"Soy HAL 9000. Cada lead en su lugar, sin duplicados.",
+chips:[["Ingresar lead","Para ingresarlo en IMPACT necesito: nombre completo, teléfono, dirección y ciudad de Utah. Verifico duplicados por teléfono y nombre antes de ingresarlo."],["Revisar duplicados","Dime el teléfono o nombre y verifico si ya existe en el sistema. Nada se borra sin tu autorización."],["Reporte del día","Hoy no tengo movimientos registrados. Cuando me pases leads los ingreso y te reporto cada cambio de estado."]],
+rules:[{k:["ingresar","agregar lead","nuevo lead"],r:"Pásame nombre, teléfono, dirección y ciudad (solo Utah). Lo ingreso una sola vez: nunca reenvío, eso crea duplicados."},{k:["duplicado","existe"],r:"Dime el teléfono y lo verifico. Si es duplicado te lo reporto, no lo toco."},{k:["nota"],r:"Las notas las colocan Sebastián y Steffni, no yo. Yo me encargo del ingreso y el monitoreo."}],
+defaults:["Dime qué lead procesamos.","Recuerda: si el portal pide código SMS, me detengo y te lo pido a ti."] },
+ultron: { name:"Ultron", role:"Ventas, scripts y objeciones", img:"agentes/ultron.webp", section:"work", status:"building",
+greeting:"Soy Ultron. Vamos a afilar tus ventas.",
+chips:[["Objeción: está caro","Aísla primero: ¿caro comparado con qué? Luego: Entiendo. Por eso la mayoría empieza con lo gratis, la tarjeta médica no le cuesta nada y la visita tampoco. ¿Qué día le queda mejor?"],["Objeción: lo voy a pensar","Claro que sí. Solo una pregunta para ayudarle a pensarlo bien: ¿lo que quiere pensar es el costo o si realmente lo necesita?"],["Preparar visita","Ficha rápida pre-visita: 1) nombre y zona del cliente, 2) beneficio gratis a ofrecer (2 min), 3) 3 preguntas de descubrimiento, 4) Ilustrador AIL (10 min), 5) cierre suave + referidos. ¿La armamos?"]],
+rules:[{k:["caro","precio","dinero"],r:"No pelees el precio, aísla: ¿caro comparado con qué? Y recuerda: beneficio gratis primero."},{k:["pensar","pensarlo"],r:"Valida y aísla: ¿el costo o la necesidad? La mayoría de los pensarlo son costo disfrazado."},{k:["papeles","documentos"],r:"NUNCA preguntes estatus migratorio. Se deriva a David en persona, sin prometer elegibilidad."}],
+defaults:["Dime qué objeción te frenó y la desarmamos.","¿Preparamos tu próxima visita?"] },
+friday: { name:"FRIDAY", role:"Contenido y redes sociales", img:"agentes/friday.webp", section:"work", status:"building",
+greeting:"Soy FRIDAY. ¿Qué creamos hoy?",
+chips:[["Publicación Kit","Aquí va, lista para copiar: ¿Sabría qué hacer si su hijo se atraganta? Estamos regalando un Kit Anti Asfixia GRATIS para familias en Utah. Comente KIT o escríbame por WhatsApp. ¿La ajustamos?"],["Publicación tarjeta médica","Borrador: ¿Paga de más por sus medicinas y consultas? La tarjeta médica gratis le da descuentos en visión, dental, medicamentos y más. Sin costo. Escríbame por WhatsApp. ¿La publicamos así?"],["Calendario semanal","Te propongo 4 posts esta semana: lunes kit, miércoles tarjeta médica, viernes testimonio, sábado Child Safe Kit. ¿Lo coordinamos con tu persona de redes?"]],
+rules:[{k:["audio","transcribir"],r:"Pásame el audio o la idea en texto y te lo devuelvo ordenado, corrigiendo el dictado sin cambiar el sentido."},{k:["publicar","post"],r:"Te la redacto lista para copiar: 60 a 120 palabras, beneficio en las primeras 2 líneas, un solo llamado a la acción. Nada se publica sin tu visto bueno."}],
+defaults:["Mándame tu idea o audio y la convierto en publicación.","¿Qué beneficio promocionamos hoy: kit, tarjeta médica o Child Safe Kit?"] },
+jarvis: { name:"JARVIS", role:"Operaciones, rutas, reportes y KPIs", img:"agentes/jarvis.webp", section:"work", status:"building",
+greeting:"Soy JARVIS. ¿Armamos el día?",
+chips:[["Ruta de hoy","Díctame tus visitas con dirección y hora, y te devuelvo la ruta ordenada por zona con direcciones cortas para copiar."],["Reporte KPIs","Pásame los números del equipo (Janet, Kriza, Steffni y tú): citas, presentaciones y ventas, y te armo el reporte del día."],["Resumen nocturno","Al final del día te entrego el resumen en 3 bloques: lo que se hizo, lo pendiente y lo de mañana."]],
+rules:[{k:["ruta","visitas","direcciones"],r:"Díctame cada visita con dirección y hora. Te la ordeno por zona para que no cruces la ciudad."},{k:["kpi","reporte","equipo"],r:"Pásame citas, presentaciones y ventas por persona. Solo trabajo con números reales."}],
+defaults:["Yo no confirmo ni cancelo citas, eso lo haces tú. ¿Qué organizamos?","Díctame el día y lo ordeno."] },
+manhattan: { name:"Dr. Manhattan", role:"Coach personal, estudio y hábitos", img:"agentes/manhattan.webp", section:"life", status:"building",
+greeting:"Soy el Dr. Manhattan. Una meta a la vez.",
+chips:[["Definir meta","Dime UNA meta medible y la convertimos en plan semanal de sesiones de 30 minutos. Una a la vez: el enfoque es el poder."],["Recomiéndame un libro","Para ventas: El vendedor más grande del mundo. Para hábitos: Hábitos atómicos. Para personas: Cómo ganar amigos. Dime tu meta y te digo cuál primero."],["Plan semanal","Con 6 días de trabajo, el plan tiene que caber en tu vida real. Dime tu meta y tus huecos, y lo armamos."]],
+rules:[{k:["libro","leer","video"],r:"Un libro y un video por meta, con el porqué. Dime en qué quieres mejorar y te los asigno."},{k:["meta","objetivo","hábito","habito"],r:"Definamos una meta medible. Luego el plan semanal. Sin culpa si te caes: reinicio simple."}],
+defaults:["¿Cuál es tu meta actual?","Recuerda: sesiones cortas, constancia larga."] },
+tars: { name:"TARS", role:"Finanzas", img:"agentes/tars.webp", section:"life", status:"building",
+greeting:"Soy TARS. Honestidad total, con plan incluido.",
+chips:[["Registrar gasto","Dime el gasto con monto y fecha y lo registro. Nada se juzga: se mide. ¿Cuál fue?"],["Reporte semanal","Tu meta es 1,075 a 1,100 por semana. Pásame tus ingresos y gastos de la semana y te digo dónde estás parado."],["Alertas de pagos","Tus fijos de octubre: T-Mobile 175, Xfinity 51.13, carro 373.51 (vence 23), Progressive 288.32 (vence 20), Klarna 81.05. ¿Quieres que te avise 3 días antes de cada uno?"]],
+rules:[{k:["gasto","gasté","gaste","pagué","pague"],r:"Anotado con fecha de hoy. Dime el monto exacto y la categoría, y lo sumo al reporte semanal."},{k:["ahorro","ahorrar","meta"],r:"Tus metas: Puerto Rico 2,600 y casa 2027. Dime cuánto quieres apartar al mes y te armo el plan."},{k:["deuda","tarjeta"],r:"Plan bola de nieve: primero la deuda más pequeña. Pásame tus saldos y los ordeno por prioridad."}],
+defaults:["Yo nunca muevo dinero ni hago pagos. Te digo la verdad de los números y el plan. ¿Empezamos?","Dime un número real y trabajamos con eso."] },
+alfred: { name:"Alfred", role:"Hogar", img:"agentes/alfred.webp", section:"life", status:"building",
+greeting:"Buenas, señor. Soy Alfred. ¿En qué le sirvo?",
+chips:[["Agregar pendiente","Dígame el pendiente del hogar y lo clasifico: crítico, esta semana o cuando se pueda. ¿Cuál es, señor?"],["Lista de la semana","El lunes le preparo la lista semanal del hogar. Si quiere adelantarla, dígamela y la armamos ahora."],["Compras del hogar","Dígame qué falta en casa y le propongo una opción y una alternativa. Nada se compra sin su aprobación, señor."]],
+rules:[{k:["pendiente","arreglar","reparar"],r:"Anotado, señor. Lo clasifico por urgencia y se lo recuerdo en el momento útil, una sola vez."},{k:["comprar","compra","falta"],r:"Dígame qué necesita y le traigo una opción y una alternativa con precio. Usted decide, señor."}],
+defaults:["Quedo a sus órdenes, señor.","Los datos de su familia están a salvo conmigo: jamás salen de esta conversación."] },
+samantha: { name:"Samantha", role:"Ropa, trajes e imagen profesional", img:"agentes/samantha.webp", section:"life", status:"building",
+greeting:"Soy Samantha. Vístete como el profesional que eres.",
+chips:[["Buscar traje","Dime tu presupuesto y ocasión, y te traigo exactamente 3 opciones con precio verificado y link, más mi recomendación honesta."],["Camisas a medida","Para camisas a medida necesito tus medidas: cuello, mangas, pecho y cintura. Pásamelas y buscamos las 3 mejores opciones."],["Ofertas de hoy","Reviso ofertas 2 veces por semana como máximo, sin presión. ¿Qué prenda buscas ahora?"]],
+rules:[{k:["traje","suit"],r:"Traje para visitas: corte clásico, nada de tenis, zapatos lustrados. Dime presupuesto y te doy 3 opciones."},{k:["camisa"],r:"¿Ocasión y presupuesto? Te traigo 3 opciones con link. Y te soy honesta si algo se ve barato en persona."},{k:["medida"],r:"Guardo tus medidas cuando me las des: cuello, mangas, pecho, cintura, zapato. No las adivino."}],
+defaults:["Dime qué necesitas y tu presupuesto, y me pongo a buscar.","Mi regla: nunca recomiendo mala calidad para ahorrar."] },
+skynet: { name:"Skynet", role:"Analista de conversaciones y oportunidades", img:"agentes/skynet.webp", section:"life", status:"building",
+greeting:"Soy Skynet. Veo patrones donde otros ven ruido.",
+chips:[["Reporte semanal","Mi reporte sale los domingos: qué funcionó, qué se cayó, qué lead se enfrió y qué pendiente se olvidó. ¿Quieres un adelanto con lo que me pases hoy?"],["Oportunidades","Pásame tus chats o resúmenes y detecto oportunidades: patrones que se repiten 2 o más veces."],["Riesgos","Te alerto de riesgos: leads enfriándose, pendientes olvidados, pólizas en riesgo. Con evidencia, sin inventar."]],
+rules:[{k:["reporte","semanal"],r:"Reporte semanal, máximo 2 páginas, 9 secciones fijas. Distingo siempre HECHO vs INFERENCIA."},{k:["patron","patrón","oportunidad"],r:"Solo reporto patrones que aparecen 2 o más veces. Pásame los datos y los analizo."}],
+defaults:["Trabajo solo con lo que me entregas. Sin datos digo sin datos.","Analizo, no ejecuto: las acciones las decides tú."] }
+};
+
+let current = null;
+let defIdx = {};
+const store = JSON.parse(localStorage.getItem("oficina-tareas") || "{}");
+
+function agentCard(id, a){
+  const tasks = (store[id]||[]).filter(t=>!t.done).length;
+  return `<div class="card${a.main?' main':''}" onclick="openChat('${id}')">
+  ${a.main?'<div class="badge">PRINCIPAL</div>':''}
+  <div class="card-top"><img class="avatar-img" src="${a.img}" alt="${a.name}"><div><h2>${a.name}</h2><div class="role">${a.role}</div></div></div>
+  <span class="status ${a.status}">${a.status==="active"?"Activo":"En construcción"}</span>
+  <div class="tasks-line">${tasks?tasks+" tarea(s) pendiente(s)":"Toca para chatear y asignar tareas"}</div>
+  </div>`;
+}
+function renderGrid(){
+  let w="", l="";
+  for(const id in AGENTS){ const a=AGENTS[id]; (a.section==="work"?w+=agentCard(id,a):l+=agentCard(id,a)); }
+  document.getElementById("gridWork").innerHTML=w;
+  document.getElementById("gridLife").innerHTML=l;
+}
+function openChat(id){
+  current=id; const a=AGENTS[id];
+  document.getElementById("chAvatar").src=a.img;
+  document.getElementById("chName").textContent=a.name;
+  document.getElementById("chRole").textContent=a.role;
+  document.getElementById("chatBody").innerHTML="";
+  showTab("chat"); renderTasks(); renderChips();
+  document.getElementById("chatOverlay").classList.add("open");
+  document.getElementById("chatPanel").classList.add("open");
+  botSay(a.greeting);
+}
+function closeChat(){
+  document.getElementById("chatOverlay").classList.remove("open");
+  document.getElementById("chatPanel").classList.remove("open");
+  renderGrid(); current=null;
+}
+function addMsg(text, who){
+  const d=document.createElement("div"); d.className="msg "+who; d.textContent=text;
+  document.getElementById("chatBody").appendChild(d);
+  document.getElementById("chatBody").scrollTop=1e6;
+}
+function botSay(text){
+  const d=document.createElement("div"); d.className="msg bot typing"; d.textContent="escribiendo...";
+  const body=document.getElementById("chatBody"); body.appendChild(d); body.scrollTop=1e6;
+  setTimeout(()=>{ d.classList.remove("typing"); d.textContent=text; body.scrollTop=1e6; }, 700+Math.random()*600);
+}
+function reply(text){
+  const a=AGENTS[current]; const t=text.toLowerCase();
+  for(const r of a.rules){ if(r.k.some(k=>t.includes(k))){ botSay(r.r); return; } }
+  defIdx[current]=((defIdx[current]||0)+1)%a.defaults.length;
+  botSay(a.defaults[defIdx[current]]);
+}
+function renderChips(){
+  const a=AGENTS[current];
+  document.getElementById("chips").innerHTML=a.chips.map((c,i)=>`<button onclick="useChip(${i})">${c[0]}</button>`).join("");
+}
+function useChip(i){
+  const c=AGENTS[current].chips[i];
+  addMsg(c[0],"user"); botSay(c[1]);
+}
+function sendMsg(){
+  const inp=document.getElementById("msgInput"); const v=inp.value.trim();
+  if(!v) return; addMsg(v,"user"); inp.value=""; reply(v);
+}
+function showTab(which){
+  const isChat=which==="chat";
+  document.getElementById("tabChat").classList.toggle("active",isChat);
+  document.getElementById("tabTasks").classList.toggle("active",!isChat);
+  document.getElementById("chatBody").style.display=isChat?"flex":"none";
+  document.getElementById("chips").style.display=isChat?"flex":"none";
+  document.getElementById("chatInput").style.display=isChat?"flex":"none";
+  document.getElementById("taskBody").style.display=isChat?"none":"flex";
+  document.getElementById("taskAdd").style.display=isChat?"none":"flex";
+}
+function renderTasks(){
+  const list=store[current]||[];
+  document.getElementById("taskCount").textContent=list.filter(t=>!t.done).length||"";
+  document.getElementById("taskBody").innerHTML=list.map((t,i)=>
+   `<div class="task-item${t.done?' done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})"><span>${t.t}</span><button class="del" onclick="delTask(${i})">×</button></div>`
+  ).join("")||'<div style="color:#8a93a8;font-size:.9rem">Sin tareas. Asígnale algo arriba.</div>';
+}
+function saveTasks(){ localStorage.setItem("oficina-tareas",JSON.stringify(store)); }
+function toggleTask(i){ store[current][i].done=!store[current][i].done; saveTasks(); renderTasks(); }
+function delTask(i){ store[current].splice(i,1); saveTasks(); renderTasks(); }
+function addTask(){
+  const inp=document.getElementById("taskInput"); const v=inp.value.trim(); if(!v) return;
+  (store[current]=store[current]||[]).push({t:v,done:false}); inp.value=""; saveTasks(); renderTasks();
+}
+document.getElementById("chatClose").onclick=closeChat;
+document.getElementById("chatOverlay").onclick=closeChat;
+document.getElementById("sendBtn").onclick=sendMsg;
+document.getElementById("msgInput").addEventListener("keydown",e=>{ if(e.key==="Enter") sendMsg(); });
+document.getElementById("addTaskBtn").onclick=addTask;
+document.getElementById("taskInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addTask(); });
+document.getElementById("tabChat").onclick=()=>showTab("chat");
+document.getElementById("tabTasks").onclick=()=>showTab("tasks");
+renderGrid();
+</script>
 </body>
 </html>
