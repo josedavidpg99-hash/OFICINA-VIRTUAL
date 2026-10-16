@@ -26,6 +26,21 @@ header p { color: #8a93a8; font-size: 1rem; }
 .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
 .dot.active { background:#4ade80; box-shadow:0 0 8px #4ade80; }
 .station .tasks-line { color:#8a93a8; font-size:.78rem; margin-top:6px; }
+.scene { border-radius: 18px; padding: 6px 18px 28px; margin-bottom: 8px; border: 1px solid #1e2637; }
+.scene-office { background: linear-gradient(180deg,#1b2438 0%,#1b2438 52%,#0b0e15 52%,#0b0e15 100%); }
+.scene-office::before { content:""; display:block; height:86px; margin:16px 8px 0; background: repeating-linear-gradient(90deg, transparent 0 30px, rgba(140,170,220,.13) 30px 140px, transparent 140px 175px); border-bottom:2px solid rgba(255,255,255,.07); border-radius:4px; }
+.scene-home { background: linear-gradient(180deg,#34291a 0%,#34291a 52%,#151009 52%,#151009 100%); border-color:#3a2f1f; }
+.scene-home::before { content:""; display:block; height:70px; margin:16px 8px 0; background: radial-gradient(ellipse 130px 62px at 18% 100%, rgba(255,190,90,.20), transparent 70%), radial-gradient(ellipse 130px 62px at 82% 100%, rgba(255,190,90,.13), transparent 70%); }
+.scene-label { font-size:.78rem; letter-spacing:4px; color:#8a93a8; margin:30px 0 10px; }
+.scene .section-title { border-bottom-color: rgba(255,255,255,.08); margin-top:16px; }
+.hstation { text-align:center; padding:22px 12px 14px; cursor:pointer; border-radius:14px; transition: transform .2s; position:relative; }
+.hstation:hover { transform: translateY(-4px); }
+.hstation .fig { height:148px; object-fit:contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); transition: transform .2s; }
+.hstation:hover .fig { transform: translateY(-6px); }
+.rug { width:150px; height:34px; background:radial-gradient(ellipse,#6b4a2f 0%,#4a3220 70%,transparent 72%); border-radius:50%; margin:-6px auto 12px; }
+.hplate { display:inline-block; background:#2a2118; border:1px solid #c9a227; color:#e8c96a; font-size:.85rem; font-weight:600; padding:5px 18px; border-radius:20px; letter-spacing:.5px; }
+.hstation .role { color:#b09a7a; font-size:.82rem; margin-top:10px; min-height:2.5em; }
+.hstation .tasks-line { color:#8a93a8; font-size:.78rem; margin-top:6px; }
 .badge { display: inline-block; background: #c9a227; color: #0b0e14; font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; letter-spacing: 1px; }
 footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
 /* Chat panel */
@@ -68,10 +83,10 @@ footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
 <p>Equipo de agentes de IA de Jose David Pacheco Garcia — toca un agente para trabajar con el</p>
 </header>
 <div class="container">
-<div class="section-title">TRABAJO — Negocio</div>
-<div class="grid" id="gridWork"></div>
-<div class="section-title">VIDA PERSONAL</div>
-<div class="grid" id="gridLife"></div>
+<div class="scene-label">LA OFICINA</div>
+<div class="scene scene-office"><div class="section-title">TRABAJO — Negocio</div><div class="grid" id="gridWork"></div></div>
+<div class="scene-label">LA CASA</div>
+<div class="scene scene-home"><div class="section-title">VIDA PERSONAL</div><div class="grid" id="gridLife"></div></div>
 </div>
 <footer>Oficina Virtual de Jose David Pacheco Garcia — 2026</footer>
 
@@ -163,13 +178,21 @@ const store = JSON.parse(localStorage.getItem("oficina-tareas") || "{}");
 
 function agentCard(id, a){
   const tasks = (store[id]||[]).filter(t=>!t.done).length;
+  const line = `<div class="tasks-line"><span class="dot ${a.status}"></span>${a.status==="active"?"En línea":"En construcción"} · ${tasks?tasks+" tarea(s)":"Toca para chatear"}</div>`;
+  if(a.section==="life"){
+    return `<div class="hstation" onclick="openChat('${id}')">
+    <img class="fig" src="${a.img}" alt="${a.name}">
+    <div class="rug"></div>
+    <div><span class="hplate">${a.name}</span></div>
+    <div class="role">${a.role}</div>${line}</div>`;
+  }
   return `<div class="station${a.main?' main':''}" onclick="openChat('${id}')">
   ${a.main?'<div class="badge">PRINCIPAL</div>':''}
   <img class="fig" src="${a.img}" alt="${a.name}">
   <div class="fshadow"></div>
   <div class="desk"><span class="plate">${a.name}</span></div>
   <div class="role">${a.role}</div>
-  <div class="tasks-line"><span class="dot ${a.status}"></span>${a.status==="active"?"En línea":"En construcción"} · ${tasks?tasks+" tarea(s)":"Toca para chatear"}</div>
+  ${line}
   </div>`;
 }
 function renderGrid(){
