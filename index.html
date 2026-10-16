@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oficina Virtual — Jose David Pacheco García</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; }
+  .wrap { max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+  header { text-align:center; padding:32px 0 8px; }
+  header h1 { font-size:28px; font-weight:700; color:#fff; letter-spacing:.5px; }
+  header p { color:#94a3b8; margin-top:8px; font-size:15px; }
+  .accent { color:#22c55e; }
+  .stats { display:flex; gap:12px; justify-content:center; margin:20px 0 28px; flex-wrap:wrap; }
+  .stat { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:12px 20px; text-align:center; }
+  .stat b { display:block; font-size:22px; color:#fff; }
+  .stat span { font-size:12px; color:#94a3b8; }
+  h2.dept { font-size:16px; text-transform:uppercase; letter-spacing:2px; color:#94a3b8; margin:28px 0 14px; border-bottom:1px solid #1e293b; padding-bottom:8px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+  .card { background:#1e293b; border:1px solid #334155; border-radius:14px; padding:18px; display:flex; gap:14px; align-items:flex-start; transition:border-color .2s; }
+  .card.active { border-color:#22c55e; }
+  .avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#166534,#22c55e); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; color:#fff; flex-shrink:0; }
+  .card.building .avatar { background:linear-gradient(135deg,#334155,#475569); }
+  .info { flex:1; }
+  .info h3 { font-size:16px; color:#fff; margin-bottom:2px; }
+  .info .role { font-size:13px; color:#94a3b8; margin-bottom:8px; }
+  .status { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; margin-bottom:10px; }
+  .status.on { background:rgba(34,197,94,.15); color:#22c55e; border:1px solid rgba(34,197,94,.4); }
+  .status.off { background:rgba(148,163,184,.1); color:#94a3b8; border:1px solid #334155; }
+  .procs { list-style:none; }
+  .procs li { font-size:13px; color:#cbd5e1; padding:3px 0 3px 16px; position:relative; }
+  .procs li::before { content:""; position:absolute; left:2px; top:10px; width:6px; height:6px; border-radius:50%; background:#22c55e; }
+  .card.building .procs li::before { background:#475569; }
+  footer { text-align:center; color:#475569; font-size:12px; margin-top:40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Oficina <span class="accent">Virtual</span></h1>
+    <p>Jose David Pacheco García — empleados digitales trabajando por ti</p>
+  </header>
+  <div class="stats">
+    <div class="stat"><b>12</b><span>agentes</span></div>
+    <div class="stat"><b>1</b><span>activo</span></div>
+    <div class="stat"><b>11</b><span>en construcción</span></div>
+  </div>
+
+  <h2 class="dept">Trabajo</h2>
+  <div class="grid">
+    <div class="card active">
+      <div class="avatar">CO</div>
+      <div class="info"><h3>Coordinadora</h3><div class="role">Leads y agenda</div>
+        <span class="status on">Activo</span>
+        <ul class="procs"><li>Recibir leads</li><li>Pedir datos</li><li>Agendar visita</li><li>Pasar el lead a David</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">SE</div>
+      <div class="info"><h3>Seguimiento</h3><div class="role">Post-visita y reactivación</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Seguimiento post-visita</li><li>Reactivar leads fríos</li><li>Sin recordatorios previos</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">PO</div>
+      <div class="info"><h3>Pólizas</h3><div class="role">Vigilancia y persistencia</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Vigilar pólizas vendidas</li><li>Alertar vencimientos</li><li>Cuidado de clientes</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">LI</div>
+      <div class="info"><h3>Leads / IMPACT</h3><div class="role">Ingreso y monitoreo</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Ingresar leads en IMPACT</li><li>Monitorear estados</li><li>Reportar movimientos</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">VE</div>
+      <div class="info"><h3>Ventas</h3><div class="role">Scripts y objeciones</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Scripts de venta</li><li>Manejo de objeciones</li><li>Preparar presentaciones</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">CT</div>
+      <div class="info"><h3>Contenido</h3><div class="role">Redes sociales</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Transcribir audios</li><li>Redactar publicaciones</li><li>Calendario de contenido</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">OP</div>
+      <div class="info"><h3>Operaciones</h3><div class="role">Rutas, reportes y equipo</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Ruta del día</li><li>Reportes y KPIs</li><li>Documentos</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="dept">Personal</h2>
+  <div class="grid">
+    <div class="card building">
+      <div class="avatar">CH</div>
+      <div class="info"><h3>Coach</h3><div class="role">Mejora personal</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Plan de estudio</li><li>Libros y videos</li><li>Hábitos</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">FI</div>
+      <div class="info"><h3>Finanzas</h3><div class="role">Presupuesto y metas</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Presupuesto mensual</li><li>Deudas y pagos</li><li>Metas de ahorro</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">HO</div>
+      <div class="info"><h3>Hogar</h3><div class="role">Pendientes de la casa</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Lista de pendientes</li><li>Compras del hogar</li><li>Mantenimiento</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">IM</div>
+      <div class="info"><h3>Imagen</h3><div class="role">Ropa y presentación</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Ofertas de ropa</li><li>Trajes y camisas</li><li>Imagen profesional</li></ul>
+      </div>
+    </div>
+    <div class="card building">
+      <div class="avatar">AN</div>
+      <div class="info"><h3>Analista</h3><div class="role">Inteligencia de tus chats</div>
+        <span class="status off">En construcción</span>
+        <ul class="procs"><li>Revisar conversaciones</li><li>Detectar patrones</li><li>Reporte de oportunidades</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>Oficina Virtual · Jose David Pacheco García</footer>
+</div>
+</body>
+</html>
