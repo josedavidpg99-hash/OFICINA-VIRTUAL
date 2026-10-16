@@ -50,6 +50,8 @@ header p { color: #8a93a8; font-size: 1rem; }
 .grid .station:nth-child(2n) .fig, .grid .hstation:nth-child(2n) .fig { animation-duration:4.6s, 2.3s; }
 .grid .station:nth-child(3n) .fig, .grid .hstation:nth-child(3n) .fig { animation-delay:.8s, .4s; }
 .doing { font-size:.75rem; color:#8a93a8; font-style:italic; margin-top:5px; min-height:1.2em; }
+.dl { position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,.5); border:1px solid #2e3a55; color:#c9a227; display:flex; align-items:center; justify-content:center; z-index:2; }
+.dl:hover { border-color:#c9a227; }
 #chatPanel { height:100vh; height:100dvh; }
 #chatBody, #taskBody { min-height:0; }
 #chatInput, #taskAdd { padding-bottom:calc(12px + env(safe-area-inset-bottom)); }
@@ -203,6 +205,7 @@ function agentCard(id, a){
   const line = `<div class="tasks-line"><span class="dot ${a.status}"></span>${a.status==="active"?"En línea":"En construcción"} · ${tasks?tasks+" tarea(s)":"Toca para chatear"}</div>`;
   if(a.section==="life"){
     return `<div class="hstation" onclick="openChat('${id}')">
+    <a class="dl" href="${a.img}" download="${id}.webp" onclick="event.stopPropagation()" title="Descargar figura"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></a>
     <img class="fig" src="${a.img}" alt="${a.name}">
     <div class="rug"></div>
     <div><span class="hplate">${a.name}</span></div>
@@ -210,6 +213,7 @@ function agentCard(id, a){
     <div class="doing" data-doing="${id}">${DOING[id][0]}</div>${line}</div>`;
   }
   return `<div class="station${a.main?' main':''}" onclick="openChat('${id}')">
+  <a class="dl" href="${a.img}" download="${id}.webp" onclick="event.stopPropagation()" title="Descargar figura"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></a>
   ${a.main?'<div class="badge">PRINCIPAL</div>':''}
   <img class="fig" src="${a.img}" alt="${a.name}">
   <div class="fshadow"></div>
