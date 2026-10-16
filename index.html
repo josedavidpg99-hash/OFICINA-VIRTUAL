@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content, viewport-fit=cover">
 <title>Oficina Virtual — Jose David Pacheco</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,6 +41,21 @@ header p { color: #8a93a8; font-size: 1rem; }
 .hplate { display:inline-block; background:#2a2118; border:1px solid #c9a227; color:#e8c96a; font-size:.85rem; font-weight:600; padding:5px 18px; border-radius:20px; letter-spacing:.5px; }
 .hstation .role { color:#b09a7a; font-size:.82rem; margin-top:10px; min-height:2.5em; }
 .hstation .tasks-line { color:#8a93a8; font-size:.78rem; margin-top:6px; }
+/* --- ciudad, movimiento y arreglos del chat --- */
+.skyline { height:120px; overflow:hidden; }
+.skyline svg { width:100%; height:100%; display:block; }
+@keyframes sway { 0%,100% { transform:translateX(-9px) } 50% { transform:translateX(9px) } }
+@keyframes bob { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-8px) } }
+.station .fig, .hstation .fig { animation: sway 3.8s ease-in-out infinite, bob 1.9s ease-in-out infinite; }
+.grid .station:nth-child(2n) .fig, .grid .hstation:nth-child(2n) .fig { animation-duration:4.6s, 2.3s; }
+.grid .station:nth-child(3n) .fig, .grid .hstation:nth-child(3n) .fig { animation-delay:.8s, .4s; }
+.doing { font-size:.75rem; color:#8a93a8; font-style:italic; margin-top:5px; min-height:1.2em; }
+#chatPanel { height:100vh; height:100dvh; }
+#chatBody, #taskBody { min-height:0; }
+#chatInput, #taskAdd { padding-bottom:calc(12px + env(safe-area-inset-bottom)); }
+#micBtn { background:#1a2133; border:1px solid #c9a227; border-radius:50%; width:44px; height:44px; color:#c9a227; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+#micBtn.rec { background:#c9a227; color:#0b0e14; }
+#toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#1a2133; border:1px solid #c9a227; color:#fff; padding:10px 18px; border-radius:10px; font-size:.85rem; display:none; z-index:99; max-width:86vw; text-align:center; }
 .badge { display: inline-block; background: #c9a227; color: #0b0e14; font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; letter-spacing: 1px; }
 footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
 /* Chat panel */
@@ -82,6 +97,12 @@ footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
 <h1>OFICINA VIRTUAL</h1>
 <p>Equipo de agentes de IA de Jose David Pacheco Garcia — toca un agente para trabajar con el</p>
 </header>
+<div class="skyline"><svg viewBox="0 0 1200 130" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<defs><pattern id="win" width="26" height="24" patternUnits="userSpaceOnUse"><rect x="8" y="6" width="8" height="10" fill="#e8c96a" opacity=".5"/></pattern></defs>
+<rect x="0" y="0" width="1200" height="130" fill="#0b0e14"/>
+<g fill="#151d33"><rect x="30" y="45" width="120" height="85"/><rect x="170" y="20" width="90" height="110"/><rect x="280" y="55" width="140" height="75"/><rect x="440" y="30" width="100" height="100"/><rect x="560" y="60" width="130" height="70"/><rect x="710" y="15" width="95" height="115"/><rect x="825" y="50" width="120" height="80"/><rect x="965" y="35" width="105" height="95"/><rect x="1090" y="60" width="90" height="70"/></g>
+<g fill="url(#win)" opacity=".45"><rect x="30" y="45" width="120" height="85"/><rect x="170" y="20" width="90" height="110"/><rect x="280" y="55" width="140" height="75"/><rect x="440" y="30" width="100" height="100"/><rect x="560" y="60" width="130" height="70"/><rect x="710" y="15" width="95" height="115"/><rect x="825" y="50" width="120" height="80"/><rect x="965" y="35" width="105" height="95"/><rect x="1090" y="60" width="90" height="70"/></g>
+</svg></div>
 <div class="container">
 <div class="scene-label">LA OFICINA</div>
 <div class="scene scene-office"><div class="section-title">TRABAJO — Negocio</div><div class="grid" id="gridWork"></div></div>
@@ -104,8 +125,9 @@ footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
 <div id="chatBody"></div>
 <div id="taskBody"></div>
 <div id="chips"></div>
-<div id="chatInput"><input id="msgInput" type="text" placeholder="Escribele al agente..."><button id="sendBtn">Enviar</button></div>
-<div id="taskAdd" style="display:none"><input id="taskInput" type="text" placeholder="Nueva tarea para este agente..."><button id="addTaskBtn">Asignar</button></div>
+<div id="chatInput"><button id="micBtn" title="Nota de voz"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg></button><input id="msgInput" type="text" placeholder="Escribele al agente..." enterkeyhint="send"><button id="sendBtn">Enviar</button></div>
+<div id="toast"></div>
+<div id="taskAdd" style="display:none"><input id="taskInput" type="text" placeholder="Nueva tarea para este agente..." enterkeyhint="send"><button id="addTaskBtn">Asignar</button></div>
 </div>
 
 <script>
@@ -184,7 +206,8 @@ function agentCard(id, a){
     <img class="fig" src="${a.img}" alt="${a.name}">
     <div class="rug"></div>
     <div><span class="hplate">${a.name}</span></div>
-    <div class="role">${a.role}</div>${line}</div>`;
+    <div class="role">${a.role}</div>
+    <div class="doing" data-doing="${id}">${DOING[id][0]}</div>${line}</div>`;
   }
   return `<div class="station${a.main?' main':''}" onclick="openChat('${id}')">
   ${a.main?'<div class="badge">PRINCIPAL</div>':''}
@@ -192,6 +215,7 @@ function agentCard(id, a){
   <div class="fshadow"></div>
   <div class="desk"><span class="plate">${a.name}</span></div>
   <div class="role">${a.role}</div>
+  <div class="doing" data-doing="${id}">${DOING[id][0]}</div>
   ${line}
   </div>`;
 }
@@ -277,6 +301,32 @@ document.getElementById("addTaskBtn").onclick=addTask;
 document.getElementById("taskInput").addEventListener("keydown",e=>{ if(e.key==="Enter") addTask(); });
 document.getElementById("tabChat").onclick=()=>showTab("chat");
 document.getElementById("tabTasks").onclick=()=>showTab("tasks");
+const DOING={
+vision:["agendando visitas…","leyendo leads nuevos…","ordenando la agenda…"],
+jocasta:["escribiendo seguimientos…","reactivando un lead frío…","revisando respuestas…"],
+kitt:["vigilando pólizas…","revisando vencimientos…","preparando alertas…"],
+hal:["ingresando leads…","buscando duplicados…","actualizando estados…"],
+ultron:["afilando objeciones…","preparando tu visita…","repasando cierres…"],
+friday:["redactando publicaciones…","transcribiendo un audio…","armando el calendario…"],
+jarvis:["trazando la ruta…","calculando KPIs…","ordenando documentos…"],
+manhattan:["preparando tu plan…","eligiendo un libro…","revisando hábitos…"],
+tars:["sumando gastos…","revisando el presupuesto…","vigilando vencimientos…"],
+alfred:["repasando pendientes…","organizando la casa…","planeando compras…"],
+samantha:["buscando ofertas…","comparando trajes…","revisando estilos…"],
+skynet:["analizando patrones…","buscando oportunidades…","redactando el reporte…"]};
+setInterval(()=>{document.querySelectorAll("[data-doing]").forEach(el=>{const arr=DOING[el.dataset.doing]; if(arr) el.textContent=arr[Math.floor(Math.random()*arr.length)];});},4200);
+function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.style.display="block"; clearTimeout(t._h); t._h=setTimeout(()=>t.style.display="none",2600); }
+const micBtn=document.getElementById("micBtn");
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){
+  const rec=new SR(); rec.lang="es-US"; rec.interimResults=false;
+  rec.onresult=e=>{ const txt=e.results[0][0].transcript; document.getElementById("msgInput").value=txt; sendMsg(); };
+  rec.onend=()=>micBtn.classList.remove("rec");
+  rec.onerror=()=>{ micBtn.classList.remove("rec"); toast("No te escuché bien, intenta de nuevo."); };
+  micBtn.onclick=()=>{ try{ rec.start(); micBtn.classList.add("rec"); toast("Escuchando… habla ahora."); }catch(e){} };
+} else {
+  micBtn.onclick=()=>toast("Este navegador no permite notas de voz. Escríbeme aquí abajo.");
+}
 renderGrid();
 </script>
 </body>
