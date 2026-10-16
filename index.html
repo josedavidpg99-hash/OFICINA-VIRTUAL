@@ -13,18 +13,19 @@ header p { color: #8a93a8; font-size: 1rem; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
 .section-title { font-size: 1.25rem; margin: 34px 0 16px; color: #c9d1e3; letter-spacing: 1px; border-bottom: 1px solid #1e2637; padding-bottom: 8px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
-.card { background: #121724; border: 1px solid #1e2637; border-radius: 14px; padding: 20px; cursor: pointer; transition: transform .2s, border-color .2s; }
-.card:hover { transform: translateY(-3px); border-color: #c9a227; }
-.card.main { border-color: #c9a227; background: linear-gradient(160deg, #171a26, #121724); }
-.card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
-.avatar-img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; background: #1a2133; flex-shrink: 0; }
-.card.main .avatar-img { outline: 2px solid #c9a227; outline-offset: 2px; }
-.card h2 { font-size: 1.12rem; }
-.card .role { color: #8a93a8; font-size: .85rem; margin-top: 2px; }
-.status { display: inline-block; font-size: .72rem; padding: 4px 12px; border-radius: 20px; margin-top: 8px; }
-.status.active { background: #123d22; color: #4ade80; }
-.status.building { background: #3d2f12; color: #fbbf24; }
-.card .tasks-line { color: #8a93a8; font-size: .8rem; margin-top: 8px; }
+.station { background: linear-gradient(180deg, #141a29 0%, #10141f 100%); border: 1px solid #1e2637; border-radius: 14px; padding: 24px 14px 16px; cursor: pointer; text-align: center; transition: transform .2s, border-color .2s; position: relative; overflow: hidden; }
+.station::before { content:""; position:absolute; inset:0; background: radial-gradient(ellipse 80% 45% at 50% 108%, rgba(201,162,39,.08), transparent 70%); pointer-events:none; }
+.station:hover { transform: translateY(-4px); border-color: #c9a227; }
+.station.main { border-color: #c9a227; }
+.fig { height: 148px; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); transition: transform .2s; position: relative; }
+.station:hover .fig { transform: translateY(-6px); }
+.fshadow { width: 100px; height: 12px; background: rgba(0,0,0,.55); border-radius: 50%; margin: -4px auto 12px; }
+.desk { height: 30px; background: linear-gradient(180deg,#7a5a38,#4a3421); border-radius: 6px; position: relative; margin: 0 8px; box-shadow: 0 4px 8px rgba(0,0,0,.4); }
+.plate { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: linear-gradient(180deg,#e3c565,#c9a227); color: #0b0e14; font-size: .78rem; font-weight: 700; padding: 3px 14px; border-radius: 4px; white-space: nowrap; letter-spacing: .5px; }
+.station .role { color: #8a93a8; font-size: .82rem; margin-top: 16px; min-height: 2.5em; }
+.dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
+.dot.active { background:#4ade80; box-shadow:0 0 8px #4ade80; }
+.station .tasks-line { color:#8a93a8; font-size:.78rem; margin-top:6px; }
 .badge { display: inline-block; background: #c9a227; color: #0b0e14; font-size: .68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 8px; letter-spacing: 1px; }
 footer { text-align: center; padding: 30px; color: #5a6378; font-size: .85rem; }
 /* Chat panel */
@@ -162,11 +163,13 @@ const store = JSON.parse(localStorage.getItem("oficina-tareas") || "{}");
 
 function agentCard(id, a){
   const tasks = (store[id]||[]).filter(t=>!t.done).length;
-  return `<div class="card${a.main?' main':''}" onclick="openChat('${id}')">
+  return `<div class="station${a.main?' main':''}" onclick="openChat('${id}')">
   ${a.main?'<div class="badge">PRINCIPAL</div>':''}
-  <div class="card-top"><img class="avatar-img" src="${a.img}" alt="${a.name}"><div><h2>${a.name}</h2><div class="role">${a.role}</div></div></div>
-  <span class="status ${a.status}">${a.status==="active"?"Activo":"En construcción"}</span>
-  <div class="tasks-line">${tasks?tasks+" tarea(s) pendiente(s)":"Toca para chatear y asignar tareas"}</div>
+  <img class="fig" src="${a.img}" alt="${a.name}">
+  <div class="fshadow"></div>
+  <div class="desk"><span class="plate">${a.name}</span></div>
+  <div class="role">${a.role}</div>
+  <div class="tasks-line"><span class="dot ${a.status}"></span>${a.status==="active"?"En línea":"En construcción"} · ${tasks?tasks+" tarea(s)":"Toca para chatear"}</div>
   </div>`;
 }
 function renderGrid(){
