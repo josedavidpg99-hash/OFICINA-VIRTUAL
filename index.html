@@ -20,14 +20,17 @@
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
   .card { background:#1e293b; border:1px solid #334155; border-radius:14px; padding:18px; display:flex; gap:14px; align-items:flex-start; transition:border-color .2s; }
   .card.active { border-color:#22c55e; }
-  .avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#166534,#22c55e); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; color:#fff; flex-shrink:0; }
+  .card.principal { border-color:#f59e0b; }
+  .avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#166534,#22c55e); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:#fff; flex-shrink:0; }
   .card.building .avatar { background:linear-gradient(135deg,#334155,#475569); }
+  .card.principal .avatar { background:linear-gradient(135deg,#92400e,#f59e0b); }
   .info { flex:1; }
   .info h3 { font-size:16px; color:#fff; margin-bottom:2px; }
   .info .role { font-size:13px; color:#94a3b8; margin-bottom:8px; }
   .status { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; margin-bottom:10px; }
   .status.on { background:rgba(34,197,94,.15); color:#22c55e; border:1px solid rgba(34,197,94,.4); }
   .status.off { background:rgba(148,163,184,.1); color:#94a3b8; border:1px solid #334155; }
+  .status.boss { background:rgba(245,158,11,.15); color:#f59e0b; border:1px solid rgba(245,158,11,.4); }
   .procs { list-style:none; }
   .procs li { font-size:13px; color:#cbd5e1; padding:3px 0 3px 16px; position:relative; }
   .procs li::before { content:""; position:absolute; left:2px; top:10px; width:6px; height:6px; border-radius:50%; background:#22c55e; }
@@ -49,51 +52,51 @@
 
   <h2 class="dept">Trabajo</h2>
   <div class="grid">
-    <div class="card active">
-      <div class="avatar">CO</div>
-      <div class="info"><h3>Coordinadora</h3><div class="role">Leads y agenda</div>
-        <span class="status on">Activo</span>
+    <div class="card principal">
+      <div class="avatar">VI</div>
+      <div class="info"><h3>Vision</h3><div class="role">El principal — Coordinadora, leads y agenda</div>
+        <span class="status boss">Principal · Activo</span>
         <ul class="procs"><li>Recibir leads</li><li>Pedir datos</li><li>Agendar visita</li><li>Pasar el lead a David</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">SE</div>
-      <div class="info"><h3>Seguimiento</h3><div class="role">Post-visita y reactivación</div>
+      <div class="avatar">JO</div>
+      <div class="info"><h3>Jocasta</h3><div class="role">Seguimiento post-visita y reactivación</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Seguimiento post-visita</li><li>Reactivar leads fríos</li><li>Sin recordatorios previos</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">PO</div>
-      <div class="info"><h3>Pólizas</h3><div class="role">Vigilancia y persistencia</div>
+      <div class="avatar">KI</div>
+      <div class="info"><h3>KITT</h3><div class="role">Pólizas — vigilancia y persistencia</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Vigilar pólizas vendidas</li><li>Alertar vencimientos</li><li>Cuidado de clientes</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">LI</div>
-      <div class="info"><h3>Leads / IMPACT</h3><div class="role">Ingreso y monitoreo</div>
+      <div class="avatar">HA</div>
+      <div class="info"><h3>HAL 9000</h3><div class="role">Leads / IMPACT — ingreso y monitoreo</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Ingresar leads en IMPACT</li><li>Monitorear estados</li><li>Reportar movimientos</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">VE</div>
-      <div class="info"><h3>Ventas</h3><div class="role">Scripts y objeciones</div>
+      <div class="avatar">UL</div>
+      <div class="info"><h3>Ultron</h3><div class="role">Ventas — scripts y objeciones</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Scripts de venta</li><li>Manejo de objeciones</li><li>Preparar presentaciones</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">CT</div>
-      <div class="info"><h3>Contenido</h3><div class="role">Redes sociales</div>
+      <div class="avatar">FR</div>
+      <div class="info"><h3>FRIDAY</h3><div class="role">Contenido — redes sociales</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Transcribir audios</li><li>Redactar publicaciones</li><li>Calendario de contenido</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">OP</div>
-      <div class="info"><h3>Operaciones</h3><div class="role">Rutas, reportes y equipo</div>
+      <div class="avatar">JA</div>
+      <div class="info"><h3>JARVIS</h3><div class="role">Operaciones — rutas, reportes y equipo</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Ruta del día</li><li>Reportes y KPIs</li><li>Documentos</li></ul>
       </div>
@@ -103,36 +106,36 @@
   <h2 class="dept">Personal</h2>
   <div class="grid">
     <div class="card building">
-      <div class="avatar">CH</div>
-      <div class="info"><h3>Coach</h3><div class="role">Mejora personal</div>
+      <div class="avatar">MA</div>
+      <div class="info"><h3>Dr. Manhattan</h3><div class="role">Coach — mejora personal</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Plan de estudio</li><li>Libros y videos</li><li>Hábitos</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">FI</div>
-      <div class="info"><h3>Finanzas</h3><div class="role">Presupuesto y metas</div>
+      <div class="avatar">TA</div>
+      <div class="info"><h3>TARS</h3><div class="role">Finanzas — presupuesto y metas</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Presupuesto mensual</li><li>Deudas y pagos</li><li>Metas de ahorro</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">HO</div>
-      <div class="info"><h3>Hogar</h3><div class="role">Pendientes de la casa</div>
+      <div class="avatar">AL</div>
+      <div class="info"><h3>Alfred</h3><div class="role">Hogar — pendientes de la casa</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Lista de pendientes</li><li>Compras del hogar</li><li>Mantenimiento</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">IM</div>
-      <div class="info"><h3>Imagen</h3><div class="role">Ropa y presentación</div>
+      <div class="avatar">SA</div>
+      <div class="info"><h3>Samantha</h3><div class="role">Imagen — ropa y presentación</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Ofertas de ropa</li><li>Trajes y camisas</li><li>Imagen profesional</li></ul>
       </div>
     </div>
     <div class="card building">
-      <div class="avatar">AN</div>
-      <div class="info"><h3>Analista</h3><div class="role">Inteligencia de tus chats</div>
+      <div class="avatar">SK</div>
+      <div class="info"><h3>Skynet</h3><div class="role">Analista — inteligencia de tus chats</div>
         <span class="status off">En construcción</span>
         <ul class="procs"><li>Revisar conversaciones</li><li>Detectar patrones</li><li>Reporte de oportunidades</li></ul>
       </div>
